@@ -44,7 +44,5 @@ MonoBehaviour:
     uiEnabled: 1
     textMeshProEnabled: 1
     tk2DEnabled: 1
-    deAudioEnabled: 1
-    deUnityExtendedEnabled: 1
   showPlayingTweens: 0
   showPausedTweens: 0
