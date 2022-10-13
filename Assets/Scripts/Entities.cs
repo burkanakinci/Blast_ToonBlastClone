@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class Entities : CustomBehaviour
 {
+    #region Datas
+    [SerializeField] private BlastableData[] m_BlastableDatas;
+    #endregion
     #region Attributes
     private Dictionary<GridNode, Blastable> m_BlastableOnScene;
     public int BlastableCount => m_BlastableOnScene.Values.Count;
@@ -28,6 +31,7 @@ public class Entities : CustomBehaviour
             m_BlastableOnScene.Remove(_gridNode);
         }
     }
+    #endregion
     public Blastable GetBlastableByGridNode(GridNode _gridNode)
     {
         return m_BlastableOnScene[_gridNode];
@@ -36,5 +40,12 @@ public class Entities : CustomBehaviour
     {
         return m_BlastableOnScene.Values.ElementAt(_index);
     }
-    #endregion
+
+    public void SetNeighborAllBlastable()
+    {
+        for (int _blastableCount = GameManager.Instance.Entities.BlastableCount - 1; _blastableCount >= 0; _blastableCount--)
+        {
+            GetBlastableByIndex(_blastableCount).SetNeighborsByBlastable();
+        }
+    }
 }

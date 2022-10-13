@@ -6,23 +6,16 @@ using UnityEngine;
 public class GridManager : CustomBehaviour
 {
     #region Attributes
-    public GridNode[,] GridNodes;
+    private GridNode[,] m_GridNodes;
     [SerializeField] private GameObject m_LockedGrid;
     [SerializeField] private Transform m_GridStartTransform;
-    [SerializeField] private float m_PerGridWidht = 0.5f;
-    public float PerGridWidht => m_PerGridWidht;
-    [SerializeField] private int m_GridXCount = 8;
-    [SerializeField] private int m_GridYCount = 8;
 
     #endregion
     #region Actions
     #endregion
     public override void Initialize()
     {
-        GridNodes = new GridNode[m_GridXCount, m_GridYCount];
 
-        SpawnGrid();
-        SetNeighborAllBlastable();
     }
 
     private Vector3 m_TempGridNodePos;
@@ -30,58 +23,36 @@ public class GridManager : CustomBehaviour
     private GridNode m_TempGridNode;
     public void SpawnGrid()
     {
-        for (int _yCount = 0; _yCount < m_GridYCount; _yCount++)
+        for (int _yCount = 0; _yCount < GameManager.Instance.LevelManager.ActiveGridColumnCount; _yCount++)
         {
-            for (int _xCount = 0; _xCount < m_GridXCount; _xCount++)
+            for (int _xCount = 0; _xCount < GameManager.Instance.LevelManager.ActiveGridRowCount; _xCount++)
             {
                 m_TempGridNodePos = m_GridStartTransform.position;
-                m_TempGridNodePos.x += (m_PerGridWidht * _xCount);
-                m_TempGridNodePos.y += (m_PerGridWidht * _yCount);
+                m_TempGridNodePos.y += (GameManager.Instance.LevelManager.ActivePerGridWidht * _xCount);
+                m_TempGridNodePos.x += (GameManager.Instance.LevelManager.ActivePerGridWidht * _yCount);
 
                 m_TempGridNode = new GridNode(m_TempGridNodePos, _xCount, _yCount);
-                GridNodes[_xCount, _yCount] = m_TempGridNode;
+                m_GridNodes[_xCount, _yCount] = m_TempGridNode;
 
                 m_TempBlastable =
                     GameManager.Instance.ObjectPool.SpawnFromPool(PooledObjectTags.Blastable, m_TempGridNodePos, Quaternion.identity, null)
-                    .GetGameObject().
-                    GetComponent<Blastable>();
+                    .GetGameObject()
+                    .Blastable;
 
-                m_TempBlastable.CurrentGridNode = m_TempGridNode;
-
-                GameManager.Instance.Entities.ManageBlastableList(ListOperation.Adding, m_TempBlastable.CurrentGridNode, m_TempBlastable);
+                m_TempBlastable.SetCurrentGridNode(m_TempGridNode);
             }
         }
     }
 
-    public void SetNeighborAllBlastable()
+    #region Getter&Setter
+    public GridNode GetGridNode(int _xIndex, int _yIndex)
     {
-        for (int _blastableCount = GameManager.Instance.Entities.BlastableCount - 1; _blastableCount >= 0; _blastableCount--)
-        {
-
-            m_TempBlastable =
-                GameManager.Instance.Entities.GetBlastableByIndex(_blastableCount);
-
-            if (m_TempBlastable.CurrentGridNode.XIndex > 0)
-            {
-                m_TempBlastable.SetNeighborBlastable(NeighboringState.OnLeft,
-                (GameManager.Instance.Entities.GetBlastableByGridNode(m_TempBlastable.CurrentGridNode.GetNeighborGridNode(NeighboringState.OnLeft))));
-            }
-            if (m_TempBlastable.CurrentGridNode.XIndex < (m_GridXCount - 1))
-            {
-                m_TempBlastable.SetNeighborBlastable(NeighboringState.OnRight,
-                (GameManager.Instance.Entities.GetBlastableByGridNode(m_TempBlastable.CurrentGridNode.GetNeighborGridNode(NeighboringState.OnRight))));
-            }
-            if (m_TempBlastable.CurrentGridNode.YIndex > 0)
-            {
-                m_TempBlastable.SetNeighborBlastable(NeighboringState.OnDown,
-                (GameManager.Instance.Entities.GetBlastableByGridNode(m_TempBlastable.CurrentGridNode.GetNeighborGridNode(NeighboringState.OnDown))));
-            }
-            if (m_TempBlastable.CurrentGridNode.YIndex < (m_GridYCount - 1))
-            {
-                m_TempBlastable.SetNeighborBlastable(NeighboringState.OnUp,
-                (GameManager.Instance.Entities.GetBlastableByGridNode(m_TempBlastable.CurrentGridNode.GetNeighborGridNode(NeighboringState.OnUp))));
-            }
-
-        }
+        return m_GridNodes[_xIndex, _yIndex];
     }
+    public void SetGridArray()
+    {
+        m_GridNodes = new GridNode[GameManager.Instance.LevelManager.ActiveGridRowCount, GameManager.Instance.LevelManager.ActiveGridColumnCount];
+    }
+
+    #endregion
 }

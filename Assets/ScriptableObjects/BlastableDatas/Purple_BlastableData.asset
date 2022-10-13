@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9950c65a5bd7034aaba13eac3cc39b7, type: 3}
+  m_Name: Purple_BlastableData
+  m_EditorClassIdentifier: 
+  m_BlastableType: 3
+  m_BlastableSprites:
+  - {fileID: 21300000, guid: 7a75f346a6f4d78429b6d6ca0f236e77, type: 3}
+  - {fileID: 21300000, guid: 60de04c30b15c1347876ea9239a57e18, type: 3}
+  - {fileID: 21300000, guid: bb07a7d0dd5c33641a2e0531013b8785, type: 3}
+  - {fileID: 21300000, guid: f8a09b1292dbdfe45bc712f61b5892bc, type: 3}

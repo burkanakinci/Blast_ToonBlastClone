@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9950c65a5bd7034aaba13eac3cc39b7, type: 3}
+  m_Name: Blue_BlastableData
+  m_EditorClassIdentifier: 
+  m_BlastableType: 0
+  m_BlastableSprites:
+  - {fileID: 21300000, guid: f8b35c7bfea5eae4cad71a9e5d1e42a0, type: 3}
+  - {fileID: 21300000, guid: 19a4c5b4c0ece7d46a937e09a7107f4c, type: 3}
+  - {fileID: 21300000, guid: e6390ee8283c0574f885d0ea95fe0fc9, type: 3}
+  - {fileID: 21300000, guid: f537b5840a4e21d46843e6b79045edd1, type: 3}

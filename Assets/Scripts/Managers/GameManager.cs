@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : CustomBehaviour
+public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    #region Components
+    #region Attributes
+    public PlayerManager PlayerManager;
+    public JsonConverter JsonConverter;
     public GridManager GridManager;
     public Entities Entities;
     public ObjectPool ObjectPool;
+    public LevelManager LevelManager;
     #endregion
 
     #region Actions
@@ -18,10 +21,16 @@ public class GameManager : CustomBehaviour
     {
         Instance = this;
 
-        base.Initialize();
         ObjectPool.Initialize();
+
+        JsonConverter.Initialize();
+        PlayerManager.Initialize();
+
         Entities.Initialize();
+
         GridManager.Initialize();
+
+        LevelManager.Initialize();
 
     }
 }

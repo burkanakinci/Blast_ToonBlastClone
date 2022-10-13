@@ -22,16 +22,16 @@ public class GridNode
         switch (_neighboringState)
         {
             case (NeighboringState.OnDown):
-                return GameManager.Instance.GridManager.GridNodes[(m_XIndex), (m_YIndex - 1)];
+                return GameManager.Instance.GridManager.GetGridNode((m_XIndex), (m_YIndex - 1));
 
             case (NeighboringState.OnUp):
-                return GameManager.Instance.GridManager.GridNodes[(m_XIndex), (m_YIndex + 1)];
+                return GameManager.Instance.GridManager.GetGridNode((m_XIndex), (m_YIndex + 1));
 
             case (NeighboringState.OnLeft):
-                return GameManager.Instance.GridManager.GridNodes[(m_XIndex - 1), (m_YIndex)];
+                return GameManager.Instance.GridManager.GetGridNode((m_XIndex - 1), (m_YIndex));
 
             case (NeighboringState.OnRight):
-                return GameManager.Instance.GridManager.GridNodes[(m_XIndex + 1), (m_YIndex)];
+                return GameManager.Instance.GridManager.GetGridNode((m_XIndex + 1), (m_YIndex));
 
             default:
                 return null;
