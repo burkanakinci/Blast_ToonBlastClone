@@ -17,7 +17,6 @@ public class JsonConverter : CustomBehaviour
 
             PlayerData = new PlayerData
             {
-                Name = "",
                 LevelNumber = 1,
                 CoinCount = 0,
             };

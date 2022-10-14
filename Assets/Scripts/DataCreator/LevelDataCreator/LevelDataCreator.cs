@@ -44,7 +44,7 @@ public class LevelDataCreator : MonoBehaviour
     {
         LevelData = ScriptableObject.CreateInstance<LevelData>();
 
-        m_SavePath = AssetDatabase.GenerateUniqueAssetPath("Assets/ScriptableObjects/LevelDatas/" + CreatedLevelNumber + "_LevelData.asset");
+        m_SavePath = AssetDatabase.GenerateUniqueAssetPath("Assets/Resources/LevelDatas/" + CreatedLevelNumber + "_LevelData.asset");
 
         LevelData.CameraSize = Camera.main.orthographicSize;
         LevelData.PerGridWidht = CreatedGridWidht;

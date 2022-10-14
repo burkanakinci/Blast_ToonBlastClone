@@ -11,7 +11,7 @@ public class Entities : CustomBehaviour
     #endregion
     #region Attributes
     private Dictionary<GridNode, Blastable> m_BlastableOnScene;
-    public int BlastableCount => m_BlastableOnScene.Values.Count;
+    public int BlastableCount => m_BlastableOnScene.Count;
     #endregion
 
     public override void Initialize()
@@ -20,7 +20,7 @@ public class Entities : CustomBehaviour
     }
 
     #region ListManagement
-    public void ManageBlastableList(ListOperation _operation, GridNode _gridNode, Blastable _blastable)
+    public void ManageBlastableOnSceneList(ListOperation _operation, GridNode _gridNode, Blastable _blastable)
     {
         if ((_operation == ListOperation.Adding))
         {
@@ -28,24 +28,38 @@ public class Entities : CustomBehaviour
         }
         else if (m_BlastableOnScene.ContainsKey(_gridNode))
         {
-            m_BlastableOnScene.Remove(_gridNode);
+            m_BlastableOnScene[_gridNode] = null;
         }
     }
     #endregion
-    public Blastable GetBlastableByGridNode(GridNode _gridNode)
+
+    #region OnAction
+    private void OnResetToMainMenu()
     {
-        return m_BlastableOnScene[_gridNode];
-    }
-    public Blastable GetBlastableByIndex(int _index)
-    {
-        return m_BlastableOnScene.Values.ElementAt(_index);
+
     }
 
-    public void SetNeighborAllBlastable()
+    private void OnLevelCompleted()
     {
-        for (int _blastableCount = GameManager.Instance.Entities.BlastableCount - 1; _blastableCount >= 0; _blastableCount--)
-        {
-            GetBlastableByIndex(_blastableCount).SetNeighborsByBlastable();
-        }
     }
+
+    private void OnLevelFailed()
+    {
+    }
+    #endregion
+
+    #region Getter_Setter
+    public BlastableData GetBlastableData(BlastableType _blastableType)
+    {
+        return m_BlastableDatas[(int)_blastableType];
+    }
+    public Blastable GetBlastableByGridNode(GridNode _gridNode)
+    {
+        if (_gridNode == null)
+        {
+            return null;
+        }
+        return m_BlastableOnScene[_gridNode];
+    }
+    #endregion
 }

@@ -12,7 +12,7 @@ public class PlayerManager : CustomBehaviour
     {
         m_PlayerStateMachine = new PlayerStateMachine(this);
 
-        m_PlayerStateMachine.ChangeStateTo(PlayerStates.Idle, true);
+        GameManager.Instance.OnResetToMainMenu += OnResetToMainMenu;
     }
 
     private void UpdateCoinCountData(int collectedCoin)
@@ -23,14 +23,15 @@ public class PlayerManager : CustomBehaviour
     {
         return 0;
     }
-    public void UpdateLevelData()
+    public void UpdateLevelData(int _levelNumber)
     {
-
+        GameManager.Instance.JsonConverter.PlayerData.LevelNumber = _levelNumber;
+        GameManager.Instance.JsonConverter.SavePlayerData();
     }
 
     public int GetLevelNumber()
     {
-        return 0;
+        return GameManager.Instance.JsonConverter.PlayerData.LevelNumber;
     }
 
     #region Events
@@ -42,18 +43,9 @@ public class PlayerManager : CustomBehaviour
         OnCoinCountChanged?.Invoke();
     }
 
-    private void OnStartGame()
-    {
-
-    }
-
     private void OnResetToMainMenu()
     {
-    }
-
-    private void OnGameFinished()
-    {
-
+        m_PlayerStateMachine.ChangeStateTo(PlayerStates.Idle, true);
     }
 
     private void OnLevelCompleted()
@@ -66,6 +58,7 @@ public class PlayerManager : CustomBehaviour
 
     private void OnDestroy()
     {
+        GameManager.Instance.OnResetToMainMenu -= OnResetToMainMenu;
     }
 
     #endregion

@@ -17,38 +17,12 @@ public class CustomBehaviour : MonoBehaviour
             return m_Blastable;
         }
     }
-    private Unblastable m_Unblastable;
-    public Unblastable Unblastable
-    {
-        get
-        {
-            if (m_Unblastable == null)
-            {
-                m_Unblastable = base.GetComponent<Unblastable>();
-            }
-            return m_Unblastable;
-        }
-    }
-    private SpriteRenderer m_SpriteRenderer;
-    public SpriteRenderer SpriteRenderer
-    {
-        get
-        {
-            if (m_SpriteRenderer == null)
-            {
-                m_SpriteRenderer = base.GetComponent<SpriteRenderer>();
-            }
-            return m_SpriteRenderer;
-        }
-    }
     #endregion
 
     #region Methods
     public virtual void Initialize()
     {
-        m_SpriteRenderer = base.GetComponent<SpriteRenderer>();
         m_Blastable = base.GetComponent<Blastable>();
-        m_Unblastable = base.GetComponent<Unblastable>();
     }
 
     #endregion

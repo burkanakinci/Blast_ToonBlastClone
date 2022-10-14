@@ -2,23 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unblastable : CustomBehaviour, IPooledObject
+public class Unblastable : Blastable
 {
-    [SerializeField] private string m_PooledTag;
-
+    #region Attributes
+    #endregion
+    public override void MovementOnGridCell()
+    {
+        transform.position = CurrentGridNode.GlobalPosition;
+    }
+    public override void SetBlastableNeighbors()
+    {
+    }
     public override void Initialize()
     {
         base.Initialize();
     }
-    public void OnObjectSpawn()
+
+    public override void OnObjectSpawn()
     {
 
     }
-    public void OnObjectDeactive()
+    public override void OnObjectDeactive()
     {
 
     }
-    public CustomBehaviour GetGameObject()
+    public override CustomBehaviour GetGameObject()
     {
         return this;
     }

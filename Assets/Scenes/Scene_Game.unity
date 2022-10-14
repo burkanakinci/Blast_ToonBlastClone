@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &145053143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 145053144}
+  - component: {fileID: 145053145}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &145053144
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145053143}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 233683730}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &145053145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145053143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60a3039e4bc8f424aadfb70642a6082e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LevelData: {fileID: 0}
 --- !u!1 &180625786
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +262,6 @@ Transform:
   m_Children:
   - {fileID: 1595327440}
   - {fileID: 233683730}
-  - {fileID: 913395445}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -255,6 +298,7 @@ Transform:
   - {fileID: 1331977889}
   - {fileID: 1516792802}
   - {fileID: 470573837}
+  - {fileID: 145053144}
   m_Father: {fileID: 220604102}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -302,39 +346,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerData:
-    Name: 
     LevelNumber: 0
     CoinCount: 0
---- !u!1 &913395444
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 913395445}
-  m_Layer: 0
-  m_Name: GridStartPos
-  m_TagString: Untagged
-  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &913395445
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 913395444}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.75, y: -4.3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 220604102}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1093875202
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,11 +391,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fea5f5808b4b83846bc3b09a8cfab1fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_BlastableMovementData: {fileID: 11400000, guid: 88ca367e6e1ba794297e707daa90887a, type: 2}
   m_LockedGrid: {fileID: 8832433449063696209, guid: 88d6bbac04ed72949b3f01c40affd26b, type: 3}
-  m_GridStartTransform: {fileID: 913395445}
-  m_PerGridWidht: 0.5
-  m_GridXCount: 8
-  m_GridYCount: 8
 --- !u!1 &1139166504
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,6 +443,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3f379fe361f38f54988b8d1d99666aba, type: 2}
   - {fileID: 11400000, guid: 5fc272890aa594041a0b6cfd5484990d, type: 2}
   - {fileID: 11400000, guid: 98dbb85f14f97ba4a8a0b15494578f01, type: 2}
+  - {fileID: 11400000, guid: 1804d89f8f2efdd41be9544fee76cfcc, type: 2}
 --- !u!1 &1309342333
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,7 +654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1595327440
 Transform:
   m_ObjectHideFlags: 0
@@ -757,6 +768,7 @@ MonoBehaviour:
   GridManager: {fileID: 1093875204}
   Entities: {fileID: 1139166506}
   ObjectPool: {fileID: 1331977890}
+  LevelManager: {fileID: 145053145}
 --- !u!1 &1900725046
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,7 +822,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
