@@ -12,19 +12,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 385906147cd1106468e207f793991819, type: 3}
   m_Name: BlastableMovementData
   m_EditorClassIdentifier: 
-  m_GridCellMovementDuration: 0.8
+  m_GridCellMovementDuration: 1
   m_GridCellMovementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
+      inSlope: -0.057574917
+      outSlope: -0.057574917
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12289157
+    - serializedVersion: 3
+      time: 1
+      value: 1
       inSlope: 2
       outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_ShakeDuration: 0.6
+  m_ShakeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_ClickedMovementDuration: 0.85
+  m_ClickedMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2.990697
+      outSlope: 2.990697
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.043373495
     - serializedVersion: 3
       time: 1
       value: 1

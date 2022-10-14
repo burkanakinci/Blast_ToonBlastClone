@@ -5,7 +5,9 @@ public class GridNode
 {
     [SerializeField] private Vector3 m_GlobalPosition;
     [SerializeField] private int m_XIndex;
+    public int XIndex=>m_XIndex;
     [SerializeField] private int m_YIndex;
+    public int YIndex=>m_YIndex;
     public Vector3 GlobalPosition => m_GlobalPosition;
 
     private NeighborGridNodeIndex[] m_NeighboringIndexes;

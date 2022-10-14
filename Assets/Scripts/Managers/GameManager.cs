@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public Entities Entities;
     public ObjectPool ObjectPool;
     public LevelManager LevelManager;
+    public InputManager InputManager;
     #endregion
 
     #region Actions
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
+        InputManager.Initialize();
         ObjectPool.Initialize();
         JsonConverter.Initialize();
         PlayerManager.Initialize();

@@ -16,6 +16,7 @@ public class GridManager : CustomBehaviour
     #region Actions
     public event Action OnSpawnedBlastableMove;
     public event Action OnCompleteSpawnedBlastableMove;
+    public event Action OnCompleteBlastableSettingSprite;
     #endregion
     public override void Initialize()
     {
@@ -29,11 +30,11 @@ public class GridManager : CustomBehaviour
     public void SpawnGrid(ref LevelData _levelData)
     {
         m_GridNodes = new GridNode[_levelData.GridRowCount, _levelData.GridColumnCount];
-
-        for (int _yCount = 0; _yCount < _levelData.GridColumnCount; _yCount++)
+        for (int _xCount = 0; _xCount < _levelData.GridRowCount; _xCount++)
         {
-            for (int _xCount = 0; _xCount < _levelData.GridRowCount; _xCount++)
+            for (int _yCount = 0; _yCount < _levelData.GridColumnCount; _yCount++)
             {
+
                 m_TempGridNodePos = _levelData.GridStartPosition;
                 m_TempGridNodePos.y += (_levelData.PerGridWidht * _xCount);
                 m_TempGridNodePos.x += (_levelData.PerGridWidht * _yCount);
@@ -88,5 +89,10 @@ public class GridManager : CustomBehaviour
         }).
         SetEase(m_BlastableMovementData.GridCellMovementCurve).
         SetId(m_SpawnedBlastableMoveTweenID);
+    }
+
+    public void SetBlastablesSprite()
+    {
+        OnCompleteBlastableSettingSprite?.Invoke();
     }
 }

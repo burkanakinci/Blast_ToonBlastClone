@@ -15,6 +15,7 @@ public class LevelManager : CustomBehaviour
     #region ExternalAccess
     public int ActiveGridRowCount => m_LevelData.GridRowCount;
     public int ActiveGridColumnCount => m_LevelData.GridColumnCount;
+    public int[] IconChangableValues=>m_LevelData.IconChangedValues;
     #endregion
     #region Actions
     public event Action OnLevelLoaded;
@@ -50,7 +51,6 @@ public class LevelManager : CustomBehaviour
     private void OnLevelFailed()
     {
     }
-
     private void OnDestroy()
     {
         GameManager.Instance.OnResetToMainMenu -= OnResetToMainMenu;

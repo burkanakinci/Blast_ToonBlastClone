@@ -127,13 +127,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf8a63ebaf695b94b9f9020447c90343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovementData: {fileID: 11400000, guid: 88ca367e6e1ba794297e707daa90887a, type: 2}
+  m_BlastableMovementData: {fileID: 11400000, guid: 88ca367e6e1ba794297e707daa90887a, type: 2}
   m_SpriteRenderer: {fileID: 8121075548501748405}
   CurrentGridNode:
     m_GlobalPosition: {x: 0, y: 0, z: 0}
     m_XIndex: 0
     m_YIndex: 0
-  m_NeighborBlastable: []
+  m_NeighborsBlastable: []
+  SameNeighborBlastable: []
 --- !u!61 &2246170404926560544
 BoxCollider2D:
   m_ObjectHideFlags: 0

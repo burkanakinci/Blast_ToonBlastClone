@@ -11,7 +11,7 @@ public class LevelData : ScriptableObject
     public int GridColumnCount = 8;
     public Vector3 GridStartPosition;
     public ColumnBlastables[] ColumnBlastables;
-    public int[] IconChangedValues = new int[3];
+    public int[] IconChangedValues = new int[4];
     #endregion
 }
 
