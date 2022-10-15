@@ -25,3 +25,5 @@ MonoBehaviour:
   - ColumnIndex: 2
     SpawnedBlastable: 06000000060000000200000001000000
   IconChangedValues: 00000000030000000400000005000000
+  TargetUnblastableCount: 2
+  MoveCount: 3

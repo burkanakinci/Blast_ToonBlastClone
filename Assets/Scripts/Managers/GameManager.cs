@@ -28,12 +28,12 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-        InputManager.Initialize();
         ObjectPool.Initialize();
         JsonConverter.Initialize();
         PlayerManager.Initialize();
-        
+
         LevelManager.Initialize();
+        InputManager.Initialize();
         Entities.Initialize();
         GridManager.Initialize();
     }
@@ -45,5 +45,9 @@ public class GameManager : MonoBehaviour
     public void ResetToMainMenu()
     {
         OnResetToMainMenu?.Invoke();
+    }
+    public void LevelFailed()
+    {
+        OnLevelFailed?.Invoke();
     }
 }

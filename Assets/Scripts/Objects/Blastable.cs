@@ -175,6 +175,7 @@ public class Blastable : CustomBehaviour, IPooledObject
         {
             return;
         }
+
         if ((m_BlastableData.BlastableType != BlastableType.Unblastable) &&
             (SameNeighborBlastableCount >= 2))
         {
@@ -192,6 +193,8 @@ public class Blastable : CustomBehaviour, IPooledObject
         {
             ShakeBlastable();
         }
+
+        GameManager.Instance.InputManager.MoveCounter++;
     }
 
     private string m_ClickedBlastableMoveTweenId;

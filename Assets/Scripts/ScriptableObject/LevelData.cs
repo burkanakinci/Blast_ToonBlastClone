@@ -12,6 +12,8 @@ public class LevelData : ScriptableObject
     public Vector3 GridStartPosition;
     public ColumnBlastables[] ColumnBlastables;
     public int[] IconChangedValues = new int[4];
+    public int TargetUnblastableCount=2;
+    public int MoveCount=5;
     #endregion
 }
 
