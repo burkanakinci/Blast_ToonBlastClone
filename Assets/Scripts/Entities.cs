@@ -24,7 +24,14 @@ public class Entities : CustomBehaviour
     {
         if ((_operation == ListOperation.Adding))
         {
-            m_BlastableOnScene.Add(_gridNode, _blastable);
+            if(m_BlastableOnScene.ContainsKey(_gridNode))
+            {
+                m_BlastableOnScene[_gridNode] = _blastable;
+            }
+            else
+            {
+                m_BlastableOnScene.Add(_gridNode, _blastable);
+            }
         }
         else if (m_BlastableOnScene.ContainsKey(_gridNode))
         {
@@ -62,4 +69,34 @@ public class Entities : CustomBehaviour
         return m_BlastableOnScene[_gridNode];
     }
     #endregion
+
+    private Coroutine m_FilledEmptyGridCoroutine;
+    public void StartFillEmptyGridNodes()
+    {
+        if (m_FilledEmptyGridCoroutine != null)
+        {
+            StopCoroutine(m_FilledEmptyGridCoroutine);
+        }
+        m_FilledEmptyGridCoroutine = StartCoroutine(FillEmptyGridNodes());
+    }
+    private IEnumerator FillEmptyGridNodes()
+    {
+        yield return new WaitForEndOfFrame();
+
+        if (m_BlastableOnScene.ContainsValue(null))
+        {
+            for (int _gridNodeCount = m_BlastableOnScene.Count - 1; _gridNodeCount >= 0; _gridNodeCount--)
+            {
+                if (m_BlastableOnScene.Values.ElementAt(_gridNodeCount) == null)
+                {
+                    m_BlastableOnScene.Keys.ElementAt(_gridNodeCount).FillGridNode();
+                }
+            }
+        }
+        else
+        {
+            GameManager.Instance.GridManager.StartBlastableMoveTween();
+        }
+    }
 }
+

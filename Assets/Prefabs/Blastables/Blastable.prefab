@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BlastableMovementData: {fileID: 11400000, guid: 88ca367e6e1ba794297e707daa90887a, type: 2}
-  m_SpriteRenderer: {fileID: 8121075548501748405}
+  m_BlastableVisual: {fileID: 8121075548501748405}
   CurrentGridNode:
     m_GlobalPosition: {x: 0, y: 0, z: 0}
     m_XIndex: 0

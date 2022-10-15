@@ -5,9 +5,9 @@ public class GridNode
 {
     [SerializeField] private Vector3 m_GlobalPosition;
     [SerializeField] private int m_XIndex;
-    public int XIndex=>m_XIndex;
+    public int XIndex => m_XIndex;
     [SerializeField] private int m_YIndex;
-    public int YIndex=>m_YIndex;
+    public int YIndex => m_YIndex;
     public Vector3 GlobalPosition => m_GlobalPosition;
 
     private NeighborGridNodeIndex[] m_NeighboringIndexes;
@@ -35,6 +35,22 @@ public class GridNode
             m_NeighboringIndexes[(int)_neighboringState].NeighborIndexY
         );
     }
+
+    public void FillGridNode()
+    {
+        if (GetNeighborGridNode(NeighboringState.OnUp) == null)
+        {
+            GameManager.Instance.GridManager.SpawnBlastable((GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables[YIndex].SpawnedBlastable[XIndex]), this);
+        }
+        else
+        {
+            GameManager.Instance.Entities.GetBlastableByGridNode(GetNeighborGridNode(NeighboringState.OnUp)).RemoveOnActions();
+            GameManager.Instance.Entities.GetBlastableByGridNode(GetNeighborGridNode(NeighboringState.OnUp)).SetCurrentGridNode(this);
+            GameManager.Instance.Entities.ManageBlastableOnSceneList(ListOperation.Subtraction, (GetNeighborGridNode(NeighboringState.OnUp)), null);
+        }
+
+        GameManager.Instance.Entities.StartFillEmptyGridNodes();
+    }
 }
 public class NeighborGridNodeIndex
 {
@@ -49,8 +65,8 @@ public class NeighborGridNodeIndex
 
         if ((NeighborIndexX >= 0) &&
         (NeighborIndexY >= 0) &&
-        (NeighborIndexX < GameManager.Instance.LevelManager.ActiveGridRowCount) &&
-        (NeighborIndexY < GameManager.Instance.LevelManager.ActiveGridColumnCount))
+        (NeighborIndexX < GameManager.Instance.LevelManager.CurrentLevelData.GridRowCount) &&
+        (NeighborIndexY < GameManager.Instance.LevelManager.CurrentLevelData.GridColumnCount))
         {
             IsNeighbor = true;
         }

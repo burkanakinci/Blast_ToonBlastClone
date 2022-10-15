@@ -33,9 +33,9 @@ public class GameManager : MonoBehaviour
         JsonConverter.Initialize();
         PlayerManager.Initialize();
         
+        LevelManager.Initialize();
         Entities.Initialize();
         GridManager.Initialize();
-        LevelManager.Initialize();
     }
 
     private void Start()

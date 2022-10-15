@@ -9,8 +9,8 @@ public class Blastable : CustomBehaviour, IPooledObject
     #region Attributes
     [SerializeField] private BlastableMovementData m_BlastableMovementData;
     private BlastableData m_BlastableData;
-    [SerializeField] private SpriteRenderer m_SpriteRenderer;
-    [HideInInspector] public GridNode CurrentGridNode;
+    [SerializeField] private SpriteRenderer m_BlastableVisual;
+    public GridNode CurrentGridNode;
     [SerializeField] private Blastable[] m_NeighborsBlastable;
     public List<Blastable> SameNeighborBlastable;
     #endregion
@@ -22,6 +22,8 @@ public class Blastable : CustomBehaviour, IPooledObject
     public event Action<float> OnClickedMovementAction;
     public event Action<Blastable> OnCompleteMovementAction;
     #endregion
+
+
     public override void Initialize()
     {
         base.Initialize();
@@ -40,27 +42,22 @@ public class Blastable : CustomBehaviour, IPooledObject
     }
     public virtual void OnObjectDeactive()
     {
-        GameManager.Instance.GridManager.OnSpawnedBlastableMove -= MovementOnGridCell;
-        GameManager.Instance.GridManager.OnCompleteSpawnedBlastableMove -= SetBlastableNeighbors;
-        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite -= SetBlastableSprite;
+        RemoveOnActions();
+        KillAllTween();
 
-        GameManager.Instance.Entities.ManageBlastableOnSceneList(ListOperation.Subtraction, CurrentGridNode, this);
         GameManager.Instance.ObjectPool.AddObjectPool(PooledObjectTags.Blastable, this);
 
-        this.gameObject.SetActive(false);
-
-        KillAllTween();
+        this.gameObject.SetActive(false);   
     }
     public virtual CustomBehaviour GetGameObject()
     {
         return this;
     }
-
     public void SetBlastableData(BlastableData _blastableData)
     {
         m_BlastableData = _blastableData;
 
-        m_SpriteRenderer.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level1_Blastable];
+        m_BlastableVisual.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level1_Blastable];
     }
     public void SetCurrentGridNode(GridNode _node)
     {
@@ -74,6 +71,7 @@ public class Blastable : CustomBehaviour, IPooledObject
         GameManager.Instance.GridManager.OnSpawnedBlastableMove += MovementOnGridCell;
         GameManager.Instance.GridManager.OnCompleteSpawnedBlastableMove += SetBlastableNeighbors;
         GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite += SetBlastableSprite;
+        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite+=RemoveOnActions;
     }
 
     private Vector3 m_TempStartPosition;
@@ -91,7 +89,6 @@ public class Blastable : CustomBehaviour, IPooledObject
             GameManager.Instance.Entities.GetBlastableByGridNode(CurrentGridNode.GetNeighborGridNode(NeighboringState.OnRight));
         m_NeighborsBlastable[(int)NeighboringState.OnUp] =
             GameManager.Instance.Entities.GetBlastableByGridNode(CurrentGridNode.GetNeighborGridNode(NeighboringState.OnUp));
-
 
         if (m_NeighborsBlastable[(int)NeighboringState.OnRight] != null)
         {
@@ -117,34 +114,39 @@ public class Blastable : CustomBehaviour, IPooledObject
                 }
             }
         }
-
-        if ((CurrentGridNode.XIndex == GameManager.Instance.LevelManager.ActiveGridRowCount - 1) &&
-            (CurrentGridNode.YIndex == GameManager.Instance.LevelManager.ActiveGridColumnCount - 1))
+        if ((CurrentGridNode.XIndex == GameManager.Instance.LevelManager.CurrentLevelData.GridRowCount - 1) &&
+            (CurrentGridNode.YIndex == GameManager.Instance.LevelManager.CurrentLevelData.GridColumnCount - 1))
         {
             GameManager.Instance.GridManager.SetBlastablesSprite();
         }
-
     }
     public virtual void SetBlastableSprite()
     {
-        if (SameNeighborBlastableCount >= GameManager.Instance.LevelManager.IconChangableValues[(int)BlastableSpriteType.Level4_Blastable])
+        if (SameNeighborBlastableCount >= GameManager.Instance.LevelManager.CurrentLevelData.IconChangedValues[(int)BlastableSpriteType.Level4_Blastable])
         {
-            m_SpriteRenderer.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level4_Blastable];
+            m_BlastableVisual.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level4_Blastable];
 
         }
-        else if (SameNeighborBlastableCount >= GameManager.Instance.LevelManager.IconChangableValues[(int)BlastableSpriteType.Level3_Blastable])
+        else if (SameNeighborBlastableCount >= GameManager.Instance.LevelManager.CurrentLevelData.IconChangedValues[(int)BlastableSpriteType.Level3_Blastable])
         {
-            m_SpriteRenderer.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level3_Blastable];
+            m_BlastableVisual.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level3_Blastable];
         }
-        else if (SameNeighborBlastableCount >= GameManager.Instance.LevelManager.IconChangableValues[(int)BlastableSpriteType.Level2_Blastable])
+        else if (SameNeighborBlastableCount >= GameManager.Instance.LevelManager.CurrentLevelData.IconChangedValues[(int)BlastableSpriteType.Level2_Blastable])
         {
-            m_SpriteRenderer.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level2_Blastable];
+            m_BlastableVisual.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level2_Blastable];
         }
     }
     public void KillAllTween()
     {
         DOTween.Kill(m_ShakeBlastableTweenID);
         DOTween.Kill(m_ClickedBlastableMoveTweenId);
+    }
+    public void RemoveOnActions()
+    {
+        GameManager.Instance.GridManager.OnSpawnedBlastableMove -= MovementOnGridCell;
+        GameManager.Instance.GridManager.OnCompleteSpawnedBlastableMove -= SetBlastableNeighbors;
+        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite -= SetBlastableSprite;
+        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite-=RemoveOnActions;
     }
 
     public void AddSameNeighborBlastableList(Blastable _blastable)
@@ -161,14 +163,13 @@ public class Blastable : CustomBehaviour, IPooledObject
             }
         }
     }
+    #region Clicked&Blast
     private void OnMouseDown()
     {
         if (!GameManager.Instance.InputManager.CanClickable)
         {
             return;
         }
-
-
         if ((m_BlastableData.BlastableType != BlastableType.Unblastable) &&
             (SameNeighborBlastableCount >= 2))
         {
@@ -180,7 +181,6 @@ public class Blastable : CustomBehaviour, IPooledObject
                     SameNeighborBlastable[_sameCount].SetClickBlastableMoveValue(this);
                 }
             }
-
             StartClickedTween();
         }
         else
@@ -204,8 +204,9 @@ public class Blastable : CustomBehaviour, IPooledObject
         }).
         OnComplete(() =>
         {
-            BlastBlastable(this);
             OnCompleteMovementAction?.Invoke(this);
+            BlastBlastable(this);
+            GameManager.Instance.Entities.StartFillEmptyGridNodes();
         }).
         SetEase(m_BlastableMovementData.ClickedMovementCurve).
         SetId(m_ClickedBlastableMoveTweenId);
@@ -237,6 +238,10 @@ public class Blastable : CustomBehaviour, IPooledObject
     {
         _clickedBlastable.OnClickedMovementAction -= MoveClickedBlastable;
         _clickedBlastable.OnCompleteMovementAction -= BlastBlastable;
+
+        GameManager.Instance.Entities.ManageBlastableOnSceneList(ListOperation.Subtraction, CurrentGridNode, this);
+
         OnObjectDeactive();
     }
+    #endregion
 }

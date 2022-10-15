@@ -7,15 +7,13 @@ using UnityEngine;
 public class LevelManager : CustomBehaviour
 {
     #region Attributes
-    [SerializeField] private LevelData m_LevelData;
+    private LevelData m_LevelData;
     private int m_CurrentLevelNumber;
     private int m_ActiveLevelDataNumber;
     private int m_MaxLevelDataCount;
     #endregion
     #region ExternalAccess
-    public int ActiveGridRowCount => m_LevelData.GridRowCount;
-    public int ActiveGridColumnCount => m_LevelData.GridColumnCount;
-    public int[] IconChangableValues=>m_LevelData.IconChangedValues;
+    [HideInInspector] public LevelData CurrentLevelData => m_LevelData;
     #endregion
     #region Actions
     public event Action OnLevelLoaded;
@@ -41,7 +39,6 @@ public class LevelManager : CustomBehaviour
         m_CurrentLevelNumber = GameManager.Instance.PlayerManager.GetLevelNumber();
 
         GetLevelData();
-        GameManager.Instance.GridManager.SpawnGrid(ref m_LevelData);
     }
 
     private void OnLevelCompleted()
