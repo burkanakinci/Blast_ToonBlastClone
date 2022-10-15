@@ -36,11 +36,24 @@ public class GridNode
         );
     }
 
+    private int m_TempRandomColumn, m_TempRandomBlastableType;
     public void FillGridNode()
     {
         if (GetNeighborGridNode(NeighboringState.OnUp) == null)
         {
-            GameManager.Instance.GridManager.SpawnBlastable((GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables[YIndex].SpawnedBlastable[XIndex]), this);
+            m_TempRandomColumn = Random.Range(0, (GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables.Length));
+            m_TempRandomBlastableType = Random.Range(0, (GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables[m_TempRandomColumn].SpawnedBlastable.Length));
+
+            if ((GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables[m_TempRandomColumn].SpawnedBlastable[m_TempRandomBlastableType]) == BlastableType.Unblastable)
+            {
+                FillGridNode();
+            }
+            else
+            {
+                GameManager.Instance.GridManager.SpawnBlastable(
+                                (GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables[m_TempRandomColumn].SpawnedBlastable[m_TempRandomBlastableType]), this);
+            }
+
         }
         else
         {

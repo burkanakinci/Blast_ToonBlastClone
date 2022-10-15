@@ -47,7 +47,7 @@ public class Blastable : CustomBehaviour, IPooledObject
 
         GameManager.Instance.ObjectPool.AddObjectPool(PooledObjectTags.Blastable, this);
 
-        this.gameObject.SetActive(false);   
+        this.gameObject.SetActive(false);
     }
     public virtual CustomBehaviour GetGameObject()
     {
@@ -66,12 +66,18 @@ public class Blastable : CustomBehaviour, IPooledObject
 
         m_TempStartPosition = transform.position;
 
+        SameNeighborBlastable.Clear();
         AddSameNeighborBlastableList(this);
 
         GameManager.Instance.GridManager.OnSpawnedBlastableMove += MovementOnGridCell;
         GameManager.Instance.GridManager.OnCompleteSpawnedBlastableMove += SetBlastableNeighbors;
         GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite += SetBlastableSprite;
-        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite+=RemoveOnActions;
+        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite += RemoveOnActions;
+
+        if (!GameManager.Instance.Entities.IsEmptyGrid())
+        {
+            GameManager.Instance.GridManager.StartBlastableMoveTween();
+        }
     }
 
     private Vector3 m_TempStartPosition;
@@ -114,10 +120,9 @@ public class Blastable : CustomBehaviour, IPooledObject
                 }
             }
         }
-        if ((CurrentGridNode.XIndex == GameManager.Instance.LevelManager.CurrentLevelData.GridRowCount - 1) &&
-            (CurrentGridNode.YIndex == GameManager.Instance.LevelManager.CurrentLevelData.GridColumnCount - 1))
+        if (!GameManager.Instance.Entities.IsEmptyGrid())
         {
-            GameManager.Instance.GridManager.SetBlastablesSprite();
+            GameManager.Instance.GridManager.StartSetBlastablesSprite();
         }
     }
     public virtual void SetBlastableSprite()
@@ -146,7 +151,7 @@ public class Blastable : CustomBehaviour, IPooledObject
         GameManager.Instance.GridManager.OnSpawnedBlastableMove -= MovementOnGridCell;
         GameManager.Instance.GridManager.OnCompleteSpawnedBlastableMove -= SetBlastableNeighbors;
         GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite -= SetBlastableSprite;
-        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite-=RemoveOnActions;
+        GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite -= RemoveOnActions;
     }
 
     public void AddSameNeighborBlastableList(Blastable _blastable)
@@ -206,6 +211,7 @@ public class Blastable : CustomBehaviour, IPooledObject
         {
             OnCompleteMovementAction?.Invoke(this);
             BlastBlastable(this);
+            BlastNeighborUnblastable();
             GameManager.Instance.Entities.StartFillEmptyGridNodes();
         }).
         SetEase(m_BlastableMovementData.ClickedMovementCurve).
@@ -234,7 +240,7 @@ public class Blastable : CustomBehaviour, IPooledObject
         transform.position = Vector3.Lerp(CurrentGridNode.GlobalPosition, m_ClickedBlastablePos, _lerpValue);
     }
 
-    private void BlastBlastable(Blastable _clickedBlastable)
+    public virtual void BlastBlastable(Blastable _clickedBlastable)
     {
         _clickedBlastable.OnClickedMovementAction -= MoveClickedBlastable;
         _clickedBlastable.OnCompleteMovementAction -= BlastBlastable;
@@ -242,6 +248,38 @@ public class Blastable : CustomBehaviour, IPooledObject
         GameManager.Instance.Entities.ManageBlastableOnSceneList(ListOperation.Subtraction, CurrentGridNode, this);
 
         OnObjectDeactive();
+    }
+
+    private void BlastNeighborUnblastable()
+    {
+        if (m_NeighborsBlastable[(int)NeighboringState.OnDown] != null)
+        {
+            if (m_NeighborsBlastable[(int)NeighboringState.OnDown].BlastableType == BlastableType.Unblastable)
+            {
+                m_NeighborsBlastable[(int)NeighboringState.OnDown].BlastBlastable(this);
+            }
+        }
+        if (m_NeighborsBlastable[(int)NeighboringState.OnUp] != null)
+        {
+            if (m_NeighborsBlastable[(int)NeighboringState.OnUp].BlastableType == BlastableType.Unblastable)
+            {
+                m_NeighborsBlastable[(int)NeighboringState.OnUp].BlastBlastable(this);
+            }
+        }
+        if (m_NeighborsBlastable[(int)NeighboringState.OnLeft] != null)
+        {
+            if (m_NeighborsBlastable[(int)NeighboringState.OnLeft].BlastableType == BlastableType.Unblastable)
+            {
+                m_NeighborsBlastable[(int)NeighboringState.OnLeft].BlastBlastable(this);
+            }
+        }
+        if (m_NeighborsBlastable[(int)NeighboringState.OnRight] != null)
+        {
+            if (m_NeighborsBlastable[(int)NeighboringState.OnRight].BlastableType == BlastableType.Unblastable)
+            {
+                m_NeighborsBlastable[(int)NeighboringState.OnRight].BlastBlastable(this);
+            }
+        }
     }
     #endregion
 }

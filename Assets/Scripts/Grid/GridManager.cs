@@ -22,7 +22,7 @@ public class GridManager : CustomBehaviour
     {
         m_SpawnedBlastableMoveTweenID = GetInstanceID() + "m_SpawnedBlastableMoveTweenID";
 
-        GameManager.Instance.OnResetToMainMenu+=SpawnGrid;
+        GameManager.Instance.OnResetToMainMenu += SpawnGrid;
     }
 
     private Vector3 m_TempGridNodePos;
@@ -44,13 +44,12 @@ public class GridManager : CustomBehaviour
                 m_TempGridNode = new GridNode(m_TempGridNodePos, _xCount, _yCount);
                 m_GridNodes[_xCount, _yCount] = m_TempGridNode;
 
-                SpawnBlastable((GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables[_yCount].SpawnedBlastable[_xCount]),m_GridNodes[_xCount, _yCount]);
+                SpawnBlastable((GameManager.Instance.LevelManager.CurrentLevelData.ColumnBlastables[_yCount].SpawnedBlastable[_xCount]), m_GridNodes[_xCount, _yCount]);
             }
         }
-        StartBlastableMoveTween();
     }
 
-    public void SpawnBlastable( BlastableType _blastableType,GridNode _node)
+    public void SpawnBlastable(BlastableType _blastableType, GridNode _node)
     {
         m_TempSpawnPos = _node.GlobalPosition;
         m_TempSpawnPos.y = (GameManager.Instance.LevelManager.CurrentLevelData.CameraSize + GameManager.Instance.LevelManager.CurrentLevelData.PerGridWidht);
@@ -92,8 +91,19 @@ public class GridManager : CustomBehaviour
         SetId(m_SpawnedBlastableMoveTweenID);
     }
 
-    public void SetBlastablesSprite()
+    private Coroutine m_SetBlastableSpriteCoroutine;
+    public void StartSetBlastablesSprite()
     {
+        if (m_SetBlastableSpriteCoroutine != null)
+        {
+            StopCoroutine(m_SetBlastableSpriteCoroutine);
+        }
+        m_SetBlastableSpriteCoroutine = StartCoroutine(SetBlastablesSprite());
+    }
+    private IEnumerator SetBlastablesSprite()
+    {
+        yield return new WaitForEndOfFrame();
+
         OnCompleteBlastableSettingSprite?.Invoke();
     }
 }

@@ -16,7 +16,6 @@ public class LevelManager : CustomBehaviour
     [HideInInspector] public LevelData CurrentLevelData => m_LevelData;
     #endregion
     #region Actions
-    public event Action OnLevelLoaded;
     #endregion
     public override void Initialize()
     {

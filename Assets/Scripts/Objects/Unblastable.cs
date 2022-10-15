@@ -24,14 +24,22 @@ public class Unblastable : Blastable
     }
     public override void OnObjectDeactive()
     {
+        KillAllTween();
+        RemoveOnActions();
+
         GameManager.Instance.ObjectPool.AddObjectPool(PooledObjectTags.Blastable, this);
 
         this.gameObject.SetActive(false);
-        
-        KillAllTween();
     }
     public override CustomBehaviour GetGameObject()
     {
         return this;
+    }
+
+    public override void BlastBlastable(Blastable _clickedBlastable)
+    {
+        GameManager.Instance.Entities.ManageBlastableOnSceneList(ListOperation.Subtraction, CurrentGridNode, this);
+
+        OnObjectDeactive();
     }
 }

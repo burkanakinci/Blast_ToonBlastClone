@@ -24,7 +24,7 @@ public class Entities : CustomBehaviour
     {
         if ((_operation == ListOperation.Adding))
         {
-            if(m_BlastableOnScene.ContainsKey(_gridNode))
+            if (m_BlastableOnScene.ContainsKey(_gridNode))
             {
                 m_BlastableOnScene[_gridNode] = _blastable;
             }
@@ -83,7 +83,7 @@ public class Entities : CustomBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        if (m_BlastableOnScene.ContainsValue(null))
+        if (IsEmptyGrid())
         {
             for (int _gridNodeCount = m_BlastableOnScene.Count - 1; _gridNodeCount >= 0; _gridNodeCount--)
             {
@@ -91,12 +91,17 @@ public class Entities : CustomBehaviour
                 {
                     m_BlastableOnScene.Keys.ElementAt(_gridNodeCount).FillGridNode();
                 }
+                else
+                {
+                    m_BlastableOnScene.Values.ElementAt(_gridNodeCount).SetCurrentGridNode(m_BlastableOnScene.Keys.ElementAt(_gridNodeCount));
+                }
             }
         }
-        else
-        {
-            GameManager.Instance.GridManager.StartBlastableMoveTween();
-        }
+    }
+
+    public bool IsEmptyGrid()
+    {
+       return m_BlastableOnScene.ContainsValue(null);
     }
 }
 
