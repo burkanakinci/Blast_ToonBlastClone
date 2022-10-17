@@ -11,11 +11,15 @@ public class LevelManager : CustomBehaviour
     private int m_CurrentLevelNumber;
     private int m_ActiveLevelDataNumber;
     private int m_MaxLevelDataCount;
+    private int m_CurrentTargetCount;
     #endregion
     #region ExternalAccess
     [HideInInspector] public LevelData CurrentLevelData => m_LevelData;
+    public int CurrentTargetCount => m_CurrentTargetCount;
     #endregion
     #region Actions
+    public event Action OnTargetCountUpdate;
+    public event Action OnCleanSceneObject;
     #endregion
     public override void Initialize()
     {
@@ -35,17 +39,32 @@ public class LevelManager : CustomBehaviour
 
     private void OnResetToMainMenu()
     {
+        OnCleanSceneObject?.Invoke();
         m_CurrentLevelNumber = GameManager.Instance.PlayerManager.GetLevelNumber();
 
         GetLevelData();
+
+        m_CurrentTargetCount = m_LevelData.TargetUnblastableCount;
     }
 
     private void OnLevelCompleted()
     {
+
     }
 
     private void OnLevelFailed()
     {
+    }
+    public void DecreaseTargetCount()
+    {
+        m_CurrentTargetCount--;
+
+        OnTargetCountUpdate?.Invoke();
+
+        if (m_CurrentTargetCount <= 0)
+        {
+            GameManager.Instance.LevelCompleted();
+        }
     }
     private void OnDestroy()
     {

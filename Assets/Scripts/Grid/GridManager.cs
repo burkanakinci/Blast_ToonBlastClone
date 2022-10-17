@@ -12,9 +12,10 @@ public class GridManager : CustomBehaviour
     #region Attributes
     private GridNode[,] m_GridNodes;
     [SerializeField] private GameObject m_LockedGrid;
+    private bool m_GridIsSpawn;
     #endregion
     #region Actions
-    public event Action OnSpawnedBlastableMove;
+    public event Action<float, bool> OnSpawnedBlastableMove;
     public event Action OnCompleteSpawnedBlastableMove;
     public event Action OnCompleteBlastableSettingSprite;
     #endregion
@@ -31,7 +32,10 @@ public class GridManager : CustomBehaviour
     private Vector3 m_TempSpawnPos;
     public void SpawnGrid()
     {
+        m_GridIsSpawn = false;
+
         m_GridNodes = new GridNode[GameManager.Instance.LevelManager.CurrentLevelData.GridRowCount, GameManager.Instance.LevelManager.CurrentLevelData.GridColumnCount];
+
         for (int _xCount = 0; _xCount < m_GridNodes.GetLength(0); _xCount++)
         {
             for (int _yCount = 0; _yCount < m_GridNodes.GetLength(1); _yCount++)
@@ -71,7 +75,6 @@ public class GridManager : CustomBehaviour
 
     private string m_SpawnedBlastableMoveTweenID;
     private float m_SpawnedBlastableMoveLerpValue;
-    [HideInInspector] public float SpawnedBlastableMovementLerpValue => m_SpawnedBlastableMoveLerpValue;
     public void StartBlastableMoveTween()
     {
         DOTween.Kill(m_SpawnedBlastableMoveTweenID);
@@ -81,10 +84,11 @@ public class GridManager : CustomBehaviour
         DOTween.To(() => m_SpawnedBlastableMoveLerpValue, x => m_SpawnedBlastableMoveLerpValue = x, 1.0f, m_BlastableMovementData.GridCellMovementDuration).
         OnUpdate(() =>
         {
-            OnSpawnedBlastableMove?.Invoke();
+            OnSpawnedBlastableMove?.Invoke(m_SpawnedBlastableMoveLerpValue, m_GridIsSpawn);
         }).
         OnComplete(() =>
         {
+            m_GridIsSpawn = true;
             OnCompleteSpawnedBlastableMove?.Invoke();
         }).
         SetEase(m_BlastableMovementData.GridCellMovementCurve).

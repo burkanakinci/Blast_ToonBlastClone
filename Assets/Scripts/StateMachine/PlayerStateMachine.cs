@@ -21,6 +21,7 @@ public class PlayerStateMachine
         mStates.Add(new IdleState(this));
         mStates.Add(new WinState(this));
         mStates.Add(new FailState(this));
+        mStates.Add(new GameState(this));
 
         mStates.Add(new GeneralState(this));
 
@@ -61,5 +62,10 @@ public class PlayerStateMachine
     public bool EqualsCurrentState(PlayerStates _state)
     {
         return (m_CurrentState == mStates[(int)_state]);
+    }
+
+    public IPlayerState GetState(PlayerStates _state)
+    {
+        return mStates[(int)_state];
     }
 }

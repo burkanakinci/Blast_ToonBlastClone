@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BlastableMovementData: {fileID: 11400000, guid: 88ca367e6e1ba794297e707daa90887a, type: 2}
+  m_BlastableCollider: {fileID: 2722584700719962560}
   m_BlastableVisual: {fileID: 3493588906428777410}
   CurrentGridNode:
     m_GlobalPosition: {x: 0, y: 0, z: 0}

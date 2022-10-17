@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class Blastable : CustomBehaviour, IPooledObject
 {
-    #region Attributes
+    #region Datas
     [SerializeField] private BlastableMovementData m_BlastableMovementData;
     private BlastableData m_BlastableData;
+    #endregion
+    #region Attributes
     [SerializeField] private SpriteRenderer m_BlastableVisual;
     public GridNode CurrentGridNode;
     [SerializeField] private Blastable[] m_NeighborsBlastable;
@@ -22,7 +24,6 @@ public class Blastable : CustomBehaviour, IPooledObject
     public event Action<float> OnClickedMovementAction;
     public event Action<Blastable> OnCompleteMovementAction;
     #endregion
-
 
     public override void Initialize()
     {
@@ -38,10 +39,11 @@ public class Blastable : CustomBehaviour, IPooledObject
     public virtual void OnObjectSpawn()
     {
         SameNeighborBlastable.Clear();
-
+        GameManager.Instance.LevelManager.OnCleanSceneObject += OnObjectDeactive;
     }
     public virtual void OnObjectDeactive()
     {
+        GameManager.Instance.LevelManager.OnCleanSceneObject -= OnObjectDeactive;
         RemoveOnActions();
         KillAllTween();
 
@@ -74,6 +76,7 @@ public class Blastable : CustomBehaviour, IPooledObject
         GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite += SetBlastableSprite;
         GameManager.Instance.GridManager.OnCompleteBlastableSettingSprite += RemoveOnActions;
 
+
         if (!GameManager.Instance.Entities.IsEmptyGrid())
         {
             GameManager.Instance.GridManager.StartBlastableMoveTween();
@@ -81,9 +84,9 @@ public class Blastable : CustomBehaviour, IPooledObject
     }
 
     private Vector3 m_TempStartPosition;
-    public virtual void MovementOnGridCell()
+    public virtual void MovementOnGridCell(float _moveLerpValue, bool _useLerp)
     {
-        transform.position = Vector3.Lerp(m_TempStartPosition, CurrentGridNode.GlobalPosition, GameManager.Instance.GridManager.SpawnedBlastableMovementLerpValue);
+        transform.position = Vector3.Lerp(m_TempStartPosition, CurrentGridNode.GlobalPosition, _moveLerpValue);
     }
     public virtual void SetBlastableNeighbors()
     {
@@ -140,6 +143,10 @@ public class Blastable : CustomBehaviour, IPooledObject
         {
             m_BlastableVisual.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level2_Blastable];
         }
+        else
+        {
+            m_BlastableVisual.sprite = m_BlastableData.BlastableSprites[(int)BlastableSpriteType.Level1_Blastable];
+        }
     }
     public void KillAllTween()
     {
@@ -181,20 +188,18 @@ public class Blastable : CustomBehaviour, IPooledObject
         {
             for (int _sameCount = SameNeighborBlastableCount - 1; _sameCount >= 0; _sameCount--)
             {
-
                 if (SameNeighborBlastable[_sameCount] != this)
                 {
                     SameNeighborBlastable[_sameCount].SetClickBlastableMoveValue(this);
                 }
             }
+            GameManager.Instance.InputManager.Clicked();
             StartClickedTween();
         }
         else
         {
             ShakeBlastable();
         }
-
-        GameManager.Instance.InputManager.MoveCounter++;
     }
 
     private string m_ClickedBlastableMoveTweenId;
@@ -203,8 +208,6 @@ public class Blastable : CustomBehaviour, IPooledObject
         DOTween.Kill(m_ClickedBlastableMoveTweenId);
         m_ClickedMovementLerpValue = 0.0f;
 
-        GameManager.Instance.InputManager.CanClickable = false;
-
         DOTween.To(() => m_ClickedMovementLerpValue, x => m_ClickedMovementLerpValue = x, 1.0f, m_BlastableMovementData.ClickedMovementDuration).
         OnUpdate(() =>
         {
@@ -212,6 +215,7 @@ public class Blastable : CustomBehaviour, IPooledObject
         }).
         OnComplete(() =>
         {
+            GameManager.Instance.ObjectPool.SpawnFromPool(PooledObjectTags.BlastParticle,transform.position,Quaternion.identity,null);
             OnCompleteMovementAction?.Invoke(this);
             BlastBlastable(this);
             BlastNeighborUnblastable();

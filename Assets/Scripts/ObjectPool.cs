@@ -86,6 +86,8 @@ public class ObjectPool : CustomBehaviour
     public void AddObjectPool(string _prefabTag, IPooledObject _pooledObject)
     {
         if (!poolDictionary[_prefabTag].Contains(_pooledObject))
+        {
             poolDictionary[_prefabTag].Enqueue(_pooledObject);
+        }
     }
 }

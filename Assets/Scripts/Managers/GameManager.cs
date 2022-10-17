@@ -14,12 +14,15 @@ public class GameManager : MonoBehaviour
     public ObjectPool ObjectPool;
     public LevelManager LevelManager;
     public InputManager InputManager;
+    public UIManager UIManager;
+    public CameraManager CameraManager;
     #endregion
 
     #region Actions
     public event Action OnResetToMainMenu;
     public event Action OnLevelCompleted;
     public event Action OnLevelFailed;
+    public event Action OnGameStart;
     #endregion
     private void Awake()
     {
@@ -33,7 +36,9 @@ public class GameManager : MonoBehaviour
         PlayerManager.Initialize();
 
         LevelManager.Initialize();
+        CameraManager.Initialize();
         InputManager.Initialize();
+        UIManager.Initialize();
         Entities.Initialize();
         GridManager.Initialize();
     }
@@ -49,5 +54,13 @@ public class GameManager : MonoBehaviour
     public void LevelFailed()
     {
         OnLevelFailed?.Invoke();
+    }
+    public void LevelCompleted()
+    {
+        OnLevelCompleted?.Invoke();
+    }
+    public void StartGame()
+    {
+        OnGameStart?.Invoke();
     }
 }

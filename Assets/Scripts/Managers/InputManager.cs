@@ -1,36 +1,64 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class InputManager : CustomBehaviour
 {
     #region Attributes
-    public int MoveCounter;
-    public bool CanClickable;
+    private int m_MoveCount;
+    private bool m_CanClickable;
     #endregion
     #region ExternalAccess
-
+    public int MoveCount => m_MoveCount;
+    public bool CanClickable => m_CanClickable;
     #endregion
+    #region Actions
+    public event Action OnClicked;
+    #endregion    
     public override void Initialize()
     {
-        CanClickable = false;
+        m_CanClickable = false;
 
         GameManager.Instance.GridManager.OnCompleteSpawnedBlastableMove += CanClickableChangeTrue;
+        GameManager.Instance.OnGameStart += CanClickableChangeTrue;
         GameManager.Instance.OnResetToMainMenu += OnResetToMainMenu;
+        OnClicked += OnClickedInput;
+        GameManager.Instance.OnLevelCompleted += OnLevelCompleted;
+        GameManager.Instance.OnLevelFailed += OnLevelCompleted;
+    }
+    public void Clicked()
+    {
+        OnClicked?.Invoke();
     }
     private void CanClickableChangeTrue()
     {
-        
-        CanClickable = true;
+        if (GameManager.Instance.PlayerManager.PlayerStateMachine.EqualsCurrentState(PlayerStates.GameState))
+        {
+            m_CanClickable = true;
+        }
     }
-    private void CanClickableChangeFalse()
+    private void CanClickedChangeFalse()
     {
-        CanClickable = false;
+        m_CanClickable = false;
     }
     private void OnResetToMainMenu()
     {
-        MoveCounter = 0;
+        m_MoveCount = 0;
         StartEqualMoveCount();
+    }
+    private void OnClickedInput()
+    {
+        IncreaseMoveCounter();
+        CanClickedChangeFalse();
+    }
+    private void IncreaseMoveCounter()
+    {
+        m_MoveCount++;
+    }
+    private void OnLevelCompleted()
+    {
+        CanClickedChangeFalse();
     }
 
     private Coroutine m_StartEqualMoveCount;
@@ -44,7 +72,7 @@ public class InputManager : CustomBehaviour
     }
     private IEnumerator EqualMoveCount()
     {
-        yield return new WaitUntil(() => MoveCounter >= GameManager.Instance.LevelManager.CurrentLevelData.MoveCount);
+        yield return new WaitUntil(() => ((m_MoveCount >= GameManager.Instance.LevelManager.CurrentLevelData.MoveCount) && (m_CanClickable)));
         GameManager.Instance.LevelFailed();
     }
 }

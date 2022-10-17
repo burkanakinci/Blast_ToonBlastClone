@@ -7,13 +7,15 @@ public class PooledObjectTags
 {
     public const string Unblastable = "Unblastable";
     public const string Blastable = "Blastable";
+    public const string BlastParticle = "BlastParticle";
 }
 
 public enum PlayerStates
 {
-    Idle = 0,
-    Win = 1,
-    Fail = 2,
+    IdleState = 0,
+    WinState = 1,
+    FailState = 2,
+    GameState = 3,
     General
 }
 
@@ -46,4 +48,10 @@ public enum BlastableSpriteType
     Level2_Blastable = 1,
     Level3_Blastable = 2,
     Level4_Blastable = 3,
+}
+public enum UIPanelType
+{
+    MainMenuPanel = 0,
+    HudPanel = 1,
+    FinishPanel = 2
 }
